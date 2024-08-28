@@ -62,6 +62,7 @@
         <div id="term-quiz-beginner" class="hidden">
             <h2 class="text-2xl font-bold mb-4">용어 퀴즈 - 초급</h2>
             <p id="term-question" class="mb-4"></p>
+            <p id="term-word-count" class="text-sm text-gray-600 mb-2"></p>
             <input type="text" id="term-answer" placeholder="정답을 입력하세요" class="border p-2 w-full mb-4">
             <button onclick="checkAnswer('term')" class="bg-green-500 text-white px-4 py-2 rounded mb-4 w-full">정답 확인</button>
             <button onclick="nextQuestion('term')" class="bg-yellow-500 text-white px-4 py-2 rounded mb-4 w-full">다음 문제</button>
@@ -73,6 +74,7 @@
         <div id="term-quiz-advanced" class="hidden">
             <h2 class="text-2xl font-bold mb-4">용어 퀴즈 - 고급</h2>
             <p id="term-question-adv" class="mb-4"></p>
+            <p id="term-word-count-adv" class="text-sm text-gray-600 mb-2"></p>
             <input type="text" id="term-answer-adv" placeholder="정답을 입력하세요" class="border p-2 w-full mb-4">
             <button onclick="checkAnswer('term-adv')" class="bg-green-700 text-white px-4 py-2 rounded mb-4 w-full">정답 확인</button>
             <button onclick="nextQuestion('term-adv')" class="bg-yellow-500 text-white px-4 py-2 rounded mb-4 w-full">다음 문제</button>
@@ -97,7 +99,7 @@
 
     <script>
         const questions = [
-           { chosung: "ㄱㅈㄴㅅㅎㅁ", keyword: "감자농사혁명", description: "만성적인 식량난을 겪고 있는 북한은 인민들의 먹는 문제 해결을 위해 ‘감자의 주식화’를 목표로 감자농사 확충과 생산량 증가를 추진하고 있다. 양강도 대홍단군을 중심으로 감자연구소를 개설하는 등 북한은 감자농사에서 종자혁명을 일으켜대대적인 생산량 증가를 도모하려 한다." },
+            { chosung: "ㄱㅈㄴㅅㅎㅁ", keyword: "감자농사혁명", description: "만성적인 식량난을 겪고 있는 북한은 인민들의 먹는 문제 해결을 위해 ‘감자의 주식화’를 목표로 감자농사 확충과 생산량 증가를 추진하고 있다. 양강도 대홍단군을 중심으로 감자연구소를 개설하는 등 북한은 감자농사에서 종자혁명을 일으켜대대적인 생산량 증가를 도모하려 한다." },
 { chosung: "ㄱㅅㄷㄱㄹ", keyword: "강성대국론", description: "'강성대국(强盛大國)이라는 용어는 말 그대로 ‘부강하고 융성한 나라’라는 뜻으로, 1998년 2월 김정일의 자강도 현지지도 이후 본격적으로 등장하였다. ○○○○○은 1998년 9월 김정일 정권의 공식 출범에 즈음하여 제시된 김정일 정권의새로운 비전과 국가목표였다.'" },
 { chosung: "ㄱㅅㄱㅇㅈㄱ", keyword: "개성공업지구", description: "'○○○○○○는 한반도 긴장완화, 북한 시장경제 실험의 장, 남북 상생의 경제협력 모델 제시 등의 성과를 보였지만, 2016년 2월 북한의 4차 핵실험과 미사일 발사에 대한 대응조치로 우리정부가 전면 가동 중단하여 현재까지 잠정적으로 폐쇄된 상황이다.'" },
 { chosung: "ㄱㅈㄱㅂ ㄱㅅ ㅂㅈㄴㅅ", keyword: "경제·국방 건설 병진노선", description: "북한이 주장하는 ○○○○○○○○○○○○○은 경제건설과 국방력 건설을 동시에추진한다는 것이다. 그러나 실제로는 경제 부문보다 군사 부문에 자원을 우선적으로 투입하겠다는 것을 의미한다. 북한은 이 노선의 채택 이후 군수공업에 우선적으로 자원을 배분함에 따라 차츰 민생경제는 만성적인 침체국면으로 빠져들게되었다." },
@@ -165,7 +167,6 @@
 { chosung: "ㄴㅁㅅㅈ", keyword: "농민시장", description: "'○○○○이란 텃밭이나 부업밭, 뙈기밭 등을 통해 생산되는 농축산물이나 부업을 통한 생산물을 매매하거나 교환하는 농촌의 장터이다. 북한의 ○○○○은 북한 당국에 의해 공식적으로 인정되는 합법적인 ‘사회주의적 상업’의 한 형태이다.'" },
 { chosung: "ㄷㄱㄹ", keyword: "단군릉", description: "고조선을 건국한 단군과 단군 부인의 무덤이라고 주장하는 무덤이다." },
 { chosung: "ㄷㅅㅎㄱ", keyword: "답사행군", description: "'○○○○은 김일성, 김정일과 관련한 행적이나 혁명사적지, 혁명전적지를 따라서 답사하는 행군이다. 청소년을 비롯하여 북한 주민들에게 혁명역사를 배우고,당과 수령에 대한 충실성을 깊이 간직하도록 교양하기 위해 진행한다.'" },
-{ chosung: " 당세포비서대회'", keyword: "'당세포", description: "'ㄷㅅㅍ, ㄷㅅㅍㅂㅅㄷㅎ','당세포는 북한 노동당의 말단 기층조직을 생명체의 세포에 견주어 이르는 표현이다. 북한의 노동당 규약에 따르면, 당세포는 일반적으로 당원이 5명부터 30명까지 있는 단위에 조직하도록 되어 있다.'" },
 { chosung: "ㄷㅈㅈㅇ ㅇㅇㄱㄹㅈ ㅇㅊ", keyword: "당재정의 유일관리제 원칙", description: "'제8차 당대회에서 당중앙검사위원회는 당재정사업 총화보고를 통해 재정수입,지출, 당재정 관리의 유일적 통제를 강조했다.'" },
 { chosung: "ㄷㅈㅇㅇㅇㅎ ㄱㅈㅈㅊㅅ", keyword: "당중앙위원회 경제정책실", description: "'조선노동당 제8차 당대회에서 확인된 노동당의 경제 관련 부서로, 내각 부총리급인사가 실장직을 겸임하고 있다. 조직의 책임자가 노동당내 경제관련 부서장의역할과 내각 부총리로서의 역할을 동시에 수행하는 만큼 당과 내각의 경제계획및 정책을 조율하는 역할, 관련 제도 정비 등을 담당할 것으로 예상된다.'" },
 { chosung: "ㄷㅇㅇ ㅅㅇㅊㄱ", keyword: "대안의 사업체계", description: "○○○○○○○○란 경제관리운영에 당적지도를 도입한 북한의 경제관리 방식을말한다. 즉 ○○○○○○○○는 공장 당위원회의 집체적 지도체계를 확립하고 계획·생산·기술을 통일적·종합적으로 지도하는 생산지도체계를 뜻한다." },
@@ -398,6 +399,9 @@
             if (isInitial) {
                 const chosungElement = document.getElementById(isAdvanced ? 'initial-chosung-adv' : 'initial-chosung');
                 chosungElement.textContent = currentQuestion.chosung;
+            } else {
+                const wordCountElement = document.getElementById(isAdvanced ? 'term-word-count-adv' : 'term-word-count');
+                wordCountElement.textContent = `정답 글자 수: ${currentQuestion.keyword.length}`;
             }
         }
 
