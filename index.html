@@ -7,17 +7,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         .hidden { display: none; }
-        .result-circle {
-            width: 200px;
-            height: 200px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            font-weight: bold;
-            color: white;
-        }
     </style>
 </head>
 <body class="bg-gray-100 min-h-screen flex items-center justify-center">
@@ -52,8 +41,9 @@
             <p id="initial-chosung" class="text-xl font-bold mb-4"></p>
             <input type="text" id="initial-answer" placeholder="정답을 입력하세요" class="border p-2 w-full mb-4">
             <button onclick="checkAnswer('initial')" class="bg-blue-500 text-white px-4 py-2 rounded mb-4 w-full">정답 확인</button>
+            <button onclick="nextQuestion('initial')" class="bg-yellow-500 text-white px-4 py-2 rounded mb-4 w-full">다음 문제</button>
             <button onclick="showScreen('main-screen')" class="bg-gray-500 text-white px-4 py-2 rounded mb-4 w-full">메인으로 돌아가기</button>
-            <button onclick="showScreen('score')" class="bg-yellow-500 text-white px-4 py-2 rounded w-full">점수 확인</button>
+            <button onclick="showScreen('score')" class="bg-purple-500 text-white px-4 py-2 rounded w-full">점수 확인</button>
         </div>
 
         <!-- 초성 퀴즈 고급 화면 -->
@@ -63,8 +53,9 @@
             <p id="initial-chosung-adv" class="text-xl font-bold mb-4"></p>
             <input type="text" id="initial-answer-adv" placeholder="정답을 입력하세요" class="border p-2 w-full mb-4">
             <button onclick="checkAnswer('initial-adv')" class="bg-blue-700 text-white px-4 py-2 rounded mb-4 w-full">정답 확인</button>
+            <button onclick="nextQuestion('initial-adv')" class="bg-yellow-500 text-white px-4 py-2 rounded mb-4 w-full">다음 문제</button>
             <button onclick="showScreen('main-screen')" class="bg-gray-500 text-white px-4 py-2 rounded mb-4 w-full">메인으로 돌아가기</button>
-            <button onclick="showScreen('score')" class="bg-yellow-500 text-white px-4 py-2 rounded w-full">점수 확인</button>
+            <button onclick="showScreen('score')" class="bg-purple-500 text-white px-4 py-2 rounded w-full">점수 확인</button>
         </div>
 
         <!-- 용어 퀴즈 초급 화면 -->
@@ -73,8 +64,9 @@
             <p id="term-question" class="mb-4"></p>
             <input type="text" id="term-answer" placeholder="정답을 입력하세요" class="border p-2 w-full mb-4">
             <button onclick="checkAnswer('term')" class="bg-green-500 text-white px-4 py-2 rounded mb-4 w-full">정답 확인</button>
+            <button onclick="nextQuestion('term')" class="bg-yellow-500 text-white px-4 py-2 rounded mb-4 w-full">다음 문제</button>
             <button onclick="showScreen('main-screen')" class="bg-gray-500 text-white px-4 py-2 rounded mb-4 w-full">메인으로 돌아가기</button>
-            <button onclick="showScreen('score')" class="bg-yellow-500 text-white px-4 py-2 rounded w-full">점수 확인</button>
+            <button onclick="showScreen('score')" class="bg-purple-500 text-white px-4 py-2 rounded w-full">점수 확인</button>
         </div>
 
         <!-- 용어 퀴즈 고급 화면 -->
@@ -83,8 +75,9 @@
             <p id="term-question-adv" class="mb-4"></p>
             <input type="text" id="term-answer-adv" placeholder="정답을 입력하세요" class="border p-2 w-full mb-4">
             <button onclick="checkAnswer('term-adv')" class="bg-green-700 text-white px-4 py-2 rounded mb-4 w-full">정답 확인</button>
+            <button onclick="nextQuestion('term-adv')" class="bg-yellow-500 text-white px-4 py-2 rounded mb-4 w-full">다음 문제</button>
             <button onclick="showScreen('main-screen')" class="bg-gray-500 text-white px-4 py-2 rounded mb-4 w-full">메인으로 돌아가기</button>
-            <button onclick="showScreen('score')" class="bg-yellow-500 text-white px-4 py-2 rounded w-full">점수 확인</button>
+            <button onclick="showScreen('score')" class="bg-purple-500 text-white px-4 py-2 rounded w-full">점수 확인</button>
         </div>
 
         <!-- 점수 확인 화면 -->
@@ -98,13 +91,13 @@
 
         <!-- 결과 팝업 -->
         <div id="result-popup" class="hidden fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50">
-            <div id="result-content" class="result-circle"></div>
+            <div id="result-content" class="bg-white rounded-lg p-6 text-center"></div>
         </div>
     </div>
 
     <script>
         const questions = [
-            { chosung: "ㄱㅈㄴㅅㅎㅁ", keyword: "감자농사혁명", description: "만성적인 식량난을 겪고 있는 북한은 인민들의 먹는 문제 해결을 위해 ‘감자의 주식화’를 목표로 감자농사 확충과 생산량 증가를 추진하고 있다. 양강도 대홍단군을 중심으로 감자연구소를 개설하는 등 북한은 감자농사에서 종자혁명을 일으켜대대적인 생산량 증가를 도모하려 한다." },
+           { chosung: "ㄱㅈㄴㅅㅎㅁ", keyword: "감자농사혁명", description: "만성적인 식량난을 겪고 있는 북한은 인민들의 먹는 문제 해결을 위해 ‘감자의 주식화’를 목표로 감자농사 확충과 생산량 증가를 추진하고 있다. 양강도 대홍단군을 중심으로 감자연구소를 개설하는 등 북한은 감자농사에서 종자혁명을 일으켜대대적인 생산량 증가를 도모하려 한다." },
 { chosung: "ㄱㅅㄷㄱㄹ", keyword: "강성대국론", description: "'강성대국(强盛大國)이라는 용어는 말 그대로 ‘부강하고 융성한 나라’라는 뜻으로, 1998년 2월 김정일의 자강도 현지지도 이후 본격적으로 등장하였다. ○○○○○은 1998년 9월 김정일 정권의 공식 출범에 즈음하여 제시된 김정일 정권의새로운 비전과 국가목표였다.'" },
 { chosung: "ㄱㅅㄱㅇㅈㄱ", keyword: "개성공업지구", description: "'○○○○○○는 한반도 긴장완화, 북한 시장경제 실험의 장, 남북 상생의 경제협력 모델 제시 등의 성과를 보였지만, 2016년 2월 북한의 4차 핵실험과 미사일 발사에 대한 대응조치로 우리정부가 전면 가동 중단하여 현재까지 잠정적으로 폐쇄된 상황이다.'" },
 { chosung: "ㄱㅈㄱㅂ ㄱㅅ ㅂㅈㄴㅅ", keyword: "경제·국방 건설 병진노선", description: "북한이 주장하는 ○○○○○○○○○○○○○은 경제건설과 국방력 건설을 동시에추진한다는 것이다. 그러나 실제로는 경제 부문보다 군사 부문에 자원을 우선적으로 투입하겠다는 것을 의미한다. 북한은 이 노선의 채택 이후 군수공업에 우선적으로 자원을 배분함에 따라 차츰 민생경제는 만성적인 침체국면으로 빠져들게되었다." },
@@ -420,18 +413,44 @@
                 scores[isInitial ? 'initial' : 'term'] += isInitial ? 1 : 2;
             }
             answerElement.value = '';
-            setQuestion(type + '-quiz');
         }
 
         function showResult(isCorrect) {
             const resultPopup = document.getElementById('result-popup');
             const resultContent = document.getElementById('result-content');
-            resultContent.textContent = isCorrect ? '정답입니다!' : '오답입니다';
-            resultContent.style.backgroundColor = isCorrect ? '#ACCD9B' : '#F17791';
-            resultPopup.classList.remove('hidden');
-            setTimeout(() => {
-                resultPopup.classList.add('hidden');
-            }, 1500);
+            
+            if (isCorrect) {
+                resultContent.innerHTML = `
+                    <div class="w-32 h-32 rounded-full bg-[#ACCD9B] flex items-center justify-center text-white font-bold mb-4">정답입니다!</div>
+                `;
+                resultPopup.classList.remove('hidden');
+                setTimeout(() => {
+                    resultPopup.classList.add('hidden');
+                }, 2000);
+            } else {
+                // 먼저 오답 팝업을 표시
+                resultContent.innerHTML = `
+                    <div class="w-32 h-32 rounded-full bg-[#F17791] flex items-center justify-center text-white font-bold mb-4">오답입니다</div>
+                `;
+                resultPopup.classList.remove('hidden');
+                
+                // 1.5초 후에 정답을 표시
+                setTimeout(() => {
+                    resultContent.innerHTML = `
+                        <div class="text-sm font-bold mb-2">정답:</div>
+                        <div class="text-base font-bold">${currentQuestion.keyword}</div>
+                    `;
+                }, 1500);
+
+                // 총 3.5초 후에 팝업을 닫음
+                setTimeout(() => {
+                    resultPopup.classList.add('hidden');
+                }, 3500);
+            }
+        }
+
+        function nextQuestion(type) {
+            setQuestion(type + '-quiz');
         }
 
         function updateScores() {
