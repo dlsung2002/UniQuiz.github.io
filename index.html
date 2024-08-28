@@ -393,14 +393,19 @@
             const filteredQuestions = questions.filter(q => isAdvanced ? q.keyword.length >= 5 : q.keyword.length <= 4);
             currentQuestion = filteredQuestions[Math.floor(Math.random() * filteredQuestions.length)];
 
-            const questionElement = document.getElementById(isInitial ? (isAdvanced ? 'initial-question-adv' : 'initial-question') : (isAdvanced ? 'term-question-adv' : 'term-question'));
-            questionElement.textContent = currentQuestion.description;
+            let questionElement, chosungElement, wordCountElement;
 
             if (isInitial) {
-                const chosungElement = document.getElementById(isAdvanced ? 'initial-chosung-adv' : 'initial-chosung');
+                questionElement = document.getElementById(isAdvanced ? 'initial-question-adv' : 'initial-question');
+                chosungElement = document.getElementById(isAdvanced ? 'initial-chosung-adv' : 'initial-chosung');
+
+                questionElement.textContent = currentQuestion.description;
                 chosungElement.textContent = currentQuestion.chosung;
             } else {
-                const wordCountElement = document.getElementById(isAdvanced ? 'term-word-count-adv' : 'term-word-count');
+                questionElement = document.getElementById(isAdvanced ? 'term-question-adv' : 'term-question');
+                wordCountElement = document.getElementById(isAdvanced ? 'term-word-count-adv' : 'term-word-count');
+
+                questionElement.textContent = currentQuestion.description;
                 wordCountElement.textContent = `정답 글자 수: ${currentQuestion.keyword.length}`;
             }
         }
@@ -422,7 +427,7 @@
         function showResult(isCorrect) {
             const resultPopup = document.getElementById('result-popup');
             const resultContent = document.getElementById('result-content');
-            
+
             if (isCorrect) {
                 resultContent.innerHTML = `
                     <div class="w-32 h-32 rounded-full bg-[#ACCD9B] flex items-center justify-center text-white font-bold mb-4">정답입니다!</div>
@@ -432,13 +437,11 @@
                     resultPopup.classList.add('hidden');
                 }, 2000);
             } else {
-                // 먼저 오답 팝업을 표시
                 resultContent.innerHTML = `
                     <div class="w-32 h-32 rounded-full bg-[#F17791] flex items-center justify-center text-white font-bold mb-4">오답입니다</div>
                 `;
                 resultPopup.classList.remove('hidden');
-                
-                // 1.5초 후에 정답을 표시
+
                 setTimeout(() => {
                     resultContent.innerHTML = `
                         <div class="text-sm font-bold mb-2">정답:</div>
@@ -446,7 +449,6 @@
                     `;
                 }, 1500);
 
-                // 총 3.5초 후에 팝업을 닫음
                 setTimeout(() => {
                     resultPopup.classList.add('hidden');
                 }, 3500);
@@ -454,7 +456,15 @@
         }
 
         function nextQuestion(type) {
-            setQuestion(type + '-quiz');
+            let screenId;
+            if (type === 'initial' || type === 'term') {
+                screenId = `${type}-quiz-beginner`;
+            } else if (type === 'initial-adv') {
+                screenId = 'initial-quiz-advanced';
+            } else if (type === 'term-adv') {
+                screenId = 'term-quiz-advanced';
+            }
+            setQuestion(screenId);
         }
 
         function updateScores() {
